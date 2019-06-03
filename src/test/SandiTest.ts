@@ -1,9 +1,7 @@
-export class SandiTest {
-    constructor(public name:string){
+import {MathUtils} from "../math/MathUtils";
 
-    }
-
-    report():void{
-        console.log(`I'm ${this.name}`);
-    }
+for (let i = 0; i < 10; i++) {
+    let uuidGen: string = MathUtils.generateUUID();
+    console.log(uuidGen);
 }
+

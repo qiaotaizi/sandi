@@ -4,7 +4,7 @@
   "description": "typescript version for three.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./src/test/SandiTest.js"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/qiaotaizi/sandi/issues"
   },
-  "homepage": "https://github.com/qiaotaizi/sandi#readme"
+  "homepage": "https://github.com/qiaotaizi/sandi#readme",
+  "dependencies": {
+    "electron": "^5.0.2",
+    "three": "^0.105.1"
+  }
 }
