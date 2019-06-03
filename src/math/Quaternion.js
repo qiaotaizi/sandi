@@ -20,3 +20,4 @@ var Quaternion = /** @class */ (function () {
     return Quaternion;
 }());
 exports.Quaternion = Quaternion;
+//# sourceMappingURL=Quaternion.js.map

@@ -6,3 +6,4 @@ var Camera = /** @class */ (function () {
     return Camera;
 }());
 exports.Camera = Camera;
+//# sourceMappingURL=Camera.js.map

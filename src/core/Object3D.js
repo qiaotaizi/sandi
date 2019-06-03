@@ -6,3 +6,4 @@ var Object3D = /** @class */ (function () {
     return Object3D;
 }());
 exports.Object3D = Object3D;
+//# sourceMappingURL=Object3D.js.map
