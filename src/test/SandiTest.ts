@@ -1,8 +1,6 @@
-import {MathUtils} from "../math/MathUtils";
+import {Quaternion} from "three";
 
-let value=10,min=2,max=3;
+let q=new Quaternion();
 
-let clmp=MathUtils.clamp(value,min,max);
 
-console.log(clmp);
 
