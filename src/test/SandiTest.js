@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var MathUtils_1 = require("../math/MathUtils");
-for (var i = 0; i < 10; i++) {
-    var uuidGen = MathUtils_1.MathUtils.generateUUID();
-    console.log(uuidGen);
-}
+var value = 10, min = 2, max = 3;
+var clmp = MathUtils_1.MathUtils.clamp(value, min, max);
+console.log(clmp);
