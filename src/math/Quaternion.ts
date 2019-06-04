@@ -376,9 +376,11 @@ export class Quaternion {
     }
 
     /**
-     * 四元数属性发生变化时调用该回调方法
+     * 属性发生变化时调用该回调方法
      */
-    onChangeCallback(){}
+    private onChangeCallback(){
+            //调用者使用onChange函数的参数覆盖该函数的实现
+        }
 
     /**
      * Adapted from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/.
