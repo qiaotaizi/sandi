@@ -10,16 +10,7 @@ export class Euler {
     static RotationOrders: Array<string> = ['XYZ', 'YZX', 'ZXY', 'XZY', 'YXZ', 'ZYX'];
     static DefaultOrder: string = 'XYZ';
 
-    x: number;
-    y: number;
-    z: number;
-    order: string;
-
-    constructor(x?: number, y?: number, z?: number, order?: string) {
-        this.x = x ? x : 0;
-        this.y = y ? y : 0;
-        this.z = z ? z : 0;
-        this.order = order ? order : Euler.DefaultOrder;
+    constructor(public x: number=0,public y: number=0,public z: number=0,public order: string=Euler.DefaultOrder) {
     }
 
     private onChangeCallback() {
