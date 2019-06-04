@@ -10,8 +10,6 @@ import {Spherical} from "./Spherical";
 import {Cylindrical} from "./Cylindrical";
 import {BufferAttribute} from "../core/BufferAttribute";
 import {MathUtils} from "./MathUtils";
-import {resolveCname} from "dns";
-import {_Math} from "three/src/math/Math";
 
 export class Vector3 {
 
@@ -206,16 +204,20 @@ export class Vector3 {
         return this;
     }
 
-    applyEuler: (euler: Euler) => Vector3 = (() => {
-        //这里闭包有意义吗?为了节约内存?
-        let quaternion = new Quaternion();
+    applyEuler(euler:Euler):Vector3{
+        return this.applyQuaternion(new Quaternion().setFromEuler(euler));
+    }
 
-        return (euler: Euler) => {
-
-            return this.applyQuaternion(quaternion.setFromEuler(euler));
-
-        };
-    })();
+    // applyEuler: (euler: Euler) => Vector3 = (() => {
+    //     //这里闭包有意义吗?为了节约内存?
+    //     //不能闭包,会造成无限递归
+    //     let quaternion = new Quaternion();
+    //     return (euler: Euler) => {
+    //
+    //         return this.applyQuaternion(quaternion.setFromEuler(euler));
+    //
+    //     };
+    // })();
 
     applyAxisAngle(axis: Vector3, angle: number): Vector3 {
         throw new Error("not implemented");
@@ -466,35 +468,45 @@ export class Vector3 {
         return this.copy( vector ).multiplyScalar( scalar );
     }
 
-    projectOnPlane:(planeNormal: Vector3)=> Vector3=(()=>{
-        let v1 = new Vector3();
+    projectOnPlane(planeNormal:Vector3):Vector3{
+        let v1=new Vector3();
+        v1.copy(this).projectOnVector(planeNormal);
+        return this.sub(v1);
+    }
 
-        return ( planeNormal:Vector3 ):Vector3=> {
+    // projectOnPlane:(planeNormal: Vector3)=> Vector3=(()=>{
+    //     let v1 = new Vector3();
+    //
+    //     return ( planeNormal:Vector3 ):Vector3=> {
+    //
+    //         v1.copy( this ).projectOnVector( planeNormal );
+    //
+    //         return this.sub( v1 );
+    //
+    //     };
+    // })();
 
-            v1.copy( this ).projectOnVector( planeNormal );
+    reflect(normal:Vector3):Vector3{
+        return this.sub(normal).multiplyScalar(2*this.dot(normal));
+    }
 
-            return this.sub( v1 );
-
-        };
-    })();
-
-    reflect:(normal: Vector3)=> Vector3=(()=>{
-        // reflect incident vector off plane orthogonal to normal
-        // normal is assumed to have unit length
-
-        let v1 = new Vector3();
-
-        return ( normal:Vector3 ):Vector3=> {
-            return this.sub( v1.copy( normal ).multiplyScalar( 2 * this.dot( normal ) ) );
-        };
-    })();
+    // reflect:(normal: Vector3)=> Vector3=(()=>{
+    //     // reflect incident vector off plane orthogonal to normal
+    //     // normal is assumed to have unit length
+    //
+    //     let v1 = new Vector3();
+    //
+    //     return ( normal:Vector3 ):Vector3=> {
+    //         return this.sub( v1.copy( normal ).multiplyScalar( 2 * this.dot( normal ) ) );
+    //     };
+    // })();
 
     angleTo(v: Vector3): number{
         let theta = this.dot( v ) / ( Math.sqrt( this.lengthSq() * v.lengthSq() ) );
 
         // clamp, to handle numerical problems
 
-        return Math.acos( _Math.clamp( theta, - 1, 1 ) );
+        return Math.acos( MathUtils.clamp( theta, - 1, 1 ) );
     }
 
     /**
@@ -575,7 +587,7 @@ export class Vector3 {
         attribute: BufferAttribute,
         index: number,
         offset?: number
-    ): this{
+    ): Vector3{
         throw new Error("not implemented");
     }
 }

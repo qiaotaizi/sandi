@@ -51,13 +51,19 @@ export class Euler {
         throw new Error("not implemented");
     }
 
-    reorder: (newOrder: string) => Euler = (() => {
-        let q = new Quaternion();
-        return (newOrder:string)=>{
-            q.setFromEuler(this);
-            return this.setFromQuaternion(q, newOrder);
-        }
-    })();
+    reorder(newOrder:string):Euler{
+        let q=new Quaternion();
+        q.setFromEuler(this);
+        return this.setFromQuaternion(q,newOrder);
+    }
+
+    // reorder: (newOrder: string) => Euler = (() => {
+    //     let q = new Quaternion();
+    //     return (newOrder:string)=>{
+    //         q.setFromEuler(this);
+    //         return this.setFromQuaternion(q, newOrder);
+    //     }
+    // })();
 
     equals(euler: Euler): boolean{
         return ( euler.x === this.x ) && ( euler.y === this.y ) && ( euler.z === this.z ) && ( euler.order === this.order );
