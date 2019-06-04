@@ -8,16 +8,8 @@ import {MathUtils} from "./MathUtils";
 
 export class Quaternion {
 
-    x: number;
-    y: number;
-    z: number;
-    w: number;
-
-    constructor(x?: number, y?: number, z?: number, w?: number) {
-        this.x = x ? x : 0;
-        this.y = y ? y : 0;
-        this.z = z ? z : 0;
-        this.w = w ? w : 1;
+    constructor( public x: number=0,public y: number=0,
+                 public z: number=0,public w: number=1) {
     }
 
     /**
