@@ -1,7 +1,6 @@
 export interface BufferAttribute {
-    // array parameter should be TypedArray.
     name:string;
-    //uuid: string;
+    uuid: string;
     array: ArrayLike<number>;
     itemSize: number;
     dynamic: boolean;
@@ -83,3 +82,5 @@ export interface BufferAttribute {
      */
     //length: number;
 }
+
+new Int32Array([1,2,3,4]);
