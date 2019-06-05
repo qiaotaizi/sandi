@@ -94,7 +94,7 @@ export class Euler {
         throw new Error("not implemented");
     }
 
-    onChange(callback: ()=>void): this{
+    onChange(callback: ()=>void): Euler{
         this.onChangeCallback = callback;
         return this;
     }
