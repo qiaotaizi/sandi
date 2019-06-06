@@ -14,7 +14,7 @@ class Matrix4 {
      * Sets all fields of this matrix.
      */
     set(n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44) {
-        var te = this.elements;
+        let te = this.elements;
         te[0] = n11;
         te[4] = n12;
         te[8] = n13;
@@ -88,9 +88,9 @@ class Matrix4 {
         let v1 = new Vector3_1.Vector3();
         let te = this.elements;
         let me = m.elements;
-        var scaleX = 1 / v1.setFromMatrixColumn(m, 0).length();
-        var scaleY = 1 / v1.setFromMatrixColumn(m, 1).length();
-        var scaleZ = 1 / v1.setFromMatrixColumn(m, 2).length();
+        let scaleX = 1 / v1.setFromMatrixColumn(m, 0).length();
+        let scaleY = 1 / v1.setFromMatrixColumn(m, 1).length();
+        let scaleZ = 1 / v1.setFromMatrixColumn(m, 2).length();
         te[0] = me[0] * scaleX;
         te[1] = me[1] * scaleX;
         te[2] = me[2] * scaleX;

@@ -42,7 +42,7 @@ export class Matrix4 implements Matrix {
         n43: number,
         n44: number
     ): Matrix4 {
-        var te = this.elements;
+        let te = this.elements;
 
         te[0] = n11;
         te[4] = n12;
@@ -145,9 +145,9 @@ export class Matrix4 implements Matrix {
         let te = this.elements;
         let me = m.elements;
 
-        var scaleX = 1 / v1.setFromMatrixColumn(m, 0).length();
-        var scaleY = 1 / v1.setFromMatrixColumn(m, 1).length();
-        var scaleZ = 1 / v1.setFromMatrixColumn(m, 2).length();
+        let scaleX = 1 / v1.setFromMatrixColumn(m, 0).length();
+        let scaleY = 1 / v1.setFromMatrixColumn(m, 1).length();
+        let scaleZ = 1 / v1.setFromMatrixColumn(m, 2).length();
 
         te[0] = me[0] * scaleX;
         te[1] = me[1] * scaleX;

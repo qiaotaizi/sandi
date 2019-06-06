@@ -4,7 +4,8 @@
   "description": "typescript version for three.js",
   "main": "index.js",
   "scripts": {
-    "test": "node ./src/test/SandiTest.js"
+    "test": "node ./src/test/SandiTest.js",
+    "genIndex": "node ./src/test/IndexGenerator.js"
   },
   "repository": {
     "type": "git",
