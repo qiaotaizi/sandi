@@ -1,73 +1,270 @@
-export interface BufferAttribute {
-    name:string;
-    uuid: string;
-    array: ArrayLike<number>;
+import {Color} from "../math/Color";
+import {Vector2} from "../math/Vector2";
+import {Vector3} from "../math/Vector3";
+import {Vector4} from "../math/Vector4";
+import {ArrayUtils} from "../utils/ArrayUtils";
+
+export class BufferAttribute {
+
+    name: string;
+    uuid: string = '';
+    array: Array<number>;
     itemSize: number;
     dynamic: boolean;
     updateRange: { offset: number; count: number };
     version: number;
     normalized: boolean;
-    needsUpdate: boolean;
     count: number;
 
-    onUpload(callback: () => void):void;
+    protected constructor(array: Array<number>, itemSize: number, normalized: boolean = false) {
+        this.name = '';
 
-    onUploadCallback():void;
+        this.array = array;
+        this.itemSize = itemSize;
+        this.count = array.length / itemSize;
+        this.normalized = false;
 
-    setArray(array: ArrayLike<number>): BufferAttribute;
+        this.dynamic = false;
+        this.updateRange = {offset: 0, count: -1};
 
-    setDynamic(dynamic: boolean): BufferAttribute;
+        this.version = 0;
+    }
 
-    clone(): BufferAttribute;
+    private _needsUpdate: boolean = false;
 
-    copy(source: BufferAttribute): BufferAttribute;
+    get needsUpdate(): boolean {
+        return this._needsUpdate;
+    }
+
+    set needsUpdate(value: boolean) {
+        if (value) this.version++;
+        this._needsUpdate = value;
+    }
+
+    onUpload(callback: () => void): BufferAttribute {
+        this.onUploadCallback = callback;
+
+        return this;
+    }
+
+    onUploadCallback(): void {
+    }
+
+    setArray(array: Array<number>): BufferAttribute {
+        this.count = array.length / this.itemSize;
+        this.array = array;
+
+        return this;
+    }
+
+    setDynamic(value: boolean): BufferAttribute {
+        this.dynamic = value;
+        return this;
+    }
+
+    clone(): BufferAttribute {
+        return new BufferAttribute(this.array, this.itemSize).copy(this);
+    }
+
+    copy(source: BufferAttribute): BufferAttribute {
+        this.name = source.name;
+
+        this.array = ArrayUtils.copy(source.array);
+        this.itemSize = source.itemSize;
+        this.count = source.count;
+        this.normalized = source.normalized;
+
+        this.dynamic = source.dynamic;
+
+        return this;
+    }
 
     copyAt(
         index1: number,
         attribute: BufferAttribute,
         index2: number
-    ): BufferAttribute;
+    ): BufferAttribute {
 
-    copyArray(array: ArrayLike<number>): BufferAttribute;
+        index1 *= this.itemSize;
+        index2 *= attribute.itemSize;
+
+        for (var i = 0, l = this.itemSize; i < l; i++) {
+
+            this.array[index1 + i] = attribute.array[index2 + i];
+
+        }
+
+        return this;
+    }
+
+    copyArray(array: Array<number>): BufferAttribute {
+        this.array = ArrayUtils.copy(array);
+        return this;
+    }
 
     copyColorsArray(
         colors: { r: number; g: number; b: number }[]
-    ): BufferAttribute;
+    ): BufferAttribute {
+        let array = this.array, offset = 0;
 
-    copyVector2sArray(vectors: { x: number; y: number }[]): BufferAttribute;
+        for (let i = 0, l = colors.length; i < l; i++) {
+
+            let color = colors[i];
+
+            if (color === undefined) {
+
+                console.warn('THREE.BufferAttribute.copyColorsArray(): color is undefined', i);
+                color = new Color();
+
+            }
+
+            array[offset++] = color.r;
+            array[offset++] = color.g;
+            array[offset++] = color.b;
+
+        }
+
+        return this;
+    }
+
+    copyVector2sArray(vectors: { x: number; y: number }[]): BufferAttribute {
+        let array = this.array, offset = 0;
+
+        for (let i = 0, l = vectors.length; i < l; i++) {
+
+            let vector = vectors[i];
+
+            if (vector === undefined) {
+
+                console.warn('THREE.BufferAttribute.copyVector2sArray(): vector is undefined', i);
+                vector = new Vector2();
+            }
+
+            array[offset++] = vector.x;
+            array[offset++] = vector.y;
+
+        }
+
+        return this;
+    }
 
     copyVector3sArray(
         vectors: { x: number; y: number; z: number }[]
-    ): BufferAttribute;
+    ): BufferAttribute {
+        let array = this.array, offset = 0;
+
+        for (let i = 0, l = vectors.length; i < l; i++) {
+
+            let vector = vectors[i];
+
+            if (vector === undefined) {
+
+                console.warn('THREE.BufferAttribute.copyVector3sArray(): vector is undefined', i);
+                vector = new Vector3();
+
+            }
+
+            array[offset++] = vector.x;
+            array[offset++] = vector.y;
+            array[offset++] = vector.z;
+
+        }
+
+        return this;
+    }
 
     copyVector4sArray(
         vectors: { x: number; y: number; z: number; w: number }[]
-    ): BufferAttribute;
+    ): BufferAttribute {
+        let array = this.array, offset = 0;
+
+        for (let i = 0, l = vectors.length; i < l; i++) {
+
+            let vector = vectors[i];
+
+            if (vector === undefined) {
+
+                console.warn('THREE.BufferAttribute.copyVector4sArray(): vector is undefined', i);
+                vector = new Vector4();
+
+            }
+
+            array[offset++] = vector.x;
+            array[offset++] = vector.y;
+            array[offset++] = vector.z;
+            array[offset++] = vector.w;
+
+        }
+
+        return this;
+    }
 
     set(
-        value: ArrayLike<number> | ArrayBufferView,
-        offset?: number
-    ): BufferAttribute;
+        value: Array<number>,
+        offset: number = 0
+    ): BufferAttribute {
 
-    getX(index: number): number;
+        this.array = ArrayUtils.copy(value, offset);
 
-    setX(index: number, x: number): BufferAttribute;
+        return this;
+    }
 
-    getY(index: number): number;
+    getX(index: number): number {
+        return this.array[index * this.itemSize];
+    }
 
-    setY(index: number, y: number): BufferAttribute;
+    setX(index: number, x: number): BufferAttribute {
+        this.array[index * this.itemSize] = x;
+        return this;
+    }
 
-    getZ(index: number): number;
+    getY(index: number): number {
+        return this.array[index * this.itemSize + 1];
+    }
 
-    setZ(index: number, z: number): BufferAttribute;
+    setY(index: number, y: number): BufferAttribute {
+        this.array[index * this.itemSize + 1] = y;
+        return this;
+    }
 
-    getW(index: number): number;
+    getZ(index: number): number {
+        return this.array[index * this.itemSize + 2];
+    }
 
-    setW(index: number, z: number): BufferAttribute;
+    setZ(index: number, z: number): BufferAttribute {
+        this.array[index * this.itemSize + 2] = z;
 
-    setXY(index: number, x: number, y: number): BufferAttribute;
+        return this;
+    }
 
-    setXYZ(index: number, x: number, y: number, z: number): BufferAttribute;
+    getW(index: number): number {
+        return this.array[index * this.itemSize + 3];
+    }
+
+    setW(index: number, w: number): BufferAttribute {
+        this.array[index * this.itemSize + 3] = w;
+
+        return this;
+    }
+
+    setXY(index: number, x: number, y: number): BufferAttribute {
+        index *= this.itemSize;
+
+        this.array[index + 0] = x;
+        this.array[index + 1] = y;
+
+        return this;
+    }
+
+    setXYZ(index: number, x: number, y: number, z: number): BufferAttribute {
+        index *= this.itemSize;
+
+        this.array[index + 0] = x;
+        this.array[index + 1] = y;
+        this.array[index + 2] = z;
+
+        return this;
+    }
 
     setXYZW(
         index: number,
@@ -75,12 +272,19 @@ export interface BufferAttribute {
         y: number,
         z: number,
         w: number
-    ): BufferAttribute;
+    ): BufferAttribute {
+        index *= this.itemSize;
+
+        this.array[index + 0] = x;
+        this.array[index + 1] = y;
+        this.array[index + 2] = z;
+        this.array[index + 3] = w;
+
+        return this;
+    }
 
     /**
      * @deprecated Use {@link BufferAttribute#count .count} instead.
      */
     //length: number;
 }
-
-new Int32Array([1,2,3,4]);
