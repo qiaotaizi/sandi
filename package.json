@@ -23,6 +23,6 @@
   "homepage": "https://github.com/qiaotaizi/sandi#readme",
   "dependencies": {
     "electron": "^5.0.2",
-    "three": "^0.105.1"
+    "three": "^0.125.0"
   }
 }
